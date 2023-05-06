@@ -1,0 +1,57 @@
+.log-header h2 {
+  text-align: center;
+  width: 70%;
+}
+
+.login-avatar {
+  text-align: center;
+  width: 70%;
+}
+
+.login-avatar img {
+  width: 80px;
+}
+
+.auth-google {
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  padding: 5px 10px;
+  display: flex;
+  border-radius: 9px;
+  align-items: center;
+  width: 155px;
+}
+.auth-google span {
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.auth-google img {
+  margin-top: 8px;
+  margin-right: 10px;
+}
+.login-auth {
+  display: flex;
+  width: 70%;
+  justify-content: space-around;
+  padding-bottom: 15px;
+}
+.auth-fb {
+  width: 165px;
+  cursor: pointer;
+}
+.auth-fb img {
+  width: 20px;
+}
+
+.forgotpass{
+  width: 70%;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.si-link a:hover{
+ 
+ text-decoration: underline;
+}

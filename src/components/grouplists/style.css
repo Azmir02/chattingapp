@@ -1,0 +1,75 @@
+.grouplist{
+    width: 100%;
+    background-color: var(--white);
+    margin-top: 15px;
+    border-radius: 20px;
+    padding: 20px ;
+    height: 320px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+.grouplist_header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.grouplist_header h4{
+    font-family: var(--primary-font);
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.group-item-wrapper{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    border-bottom: 1px solid #e7e7e7;
+    padding-bottom: 15px;
+}
+
+.group-item-wrapper:last-child {
+    border-bottom: none;
+}
+
+.group-images{
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.groups-name{
+    width: 60%;
+}
+
+.groups-name h5{
+    font-family: var(--primary-font);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--black);
+}
+
+.groups-list-btn{
+    width: 20%;
+}
+
+.groups-list-btn button{
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 8px 0;
+    border-radius: 5px;
+    background-color: var(--primary-color);
+    color: #fff;
+    font-family: var(--primary-font);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.create_button{
+    background-color: var(--primary-color) !important;
+    color: var(--white) !important;
+    margin-top: 25px !important;
+}

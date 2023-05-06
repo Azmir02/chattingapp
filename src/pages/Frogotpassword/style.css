@@ -1,0 +1,27 @@
+.main_forget_wrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.inner_forgot_box{
+    width: 650px;
+    padding: 20px 30px;
+    background-color: #f9f9f9;
+    border-radius: 15px;
+}
+
+.forget_header{
+    margin-bottom: 25px;
+}
+
+.forget_header h4{
+    font-size: 24px;
+    color: var(--secondary-color);
+    font-weight: 500;
+}
+
+.reset_btn{
+    margin-top: 25px;
+}

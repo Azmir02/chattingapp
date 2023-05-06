@@ -1,0 +1,15 @@
+.reg-header {
+  padding-bottom: 30px;
+}
+.reg-header h2 {
+  font-family: var(--secondary-font);
+  color: var(--title-color);
+  font-size: 34px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+.reg-header p {
+  font-family: var(--secondary-font);
+  color: var(--black);
+  font-size: 20px;
+}
