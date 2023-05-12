@@ -58,19 +58,19 @@ const Friends = () => {
 
   // activesinglefrnds
   const handleActiveSingle = (item) => {
-    console.log(item);
     if (item.reciverid == user.uid) {
       dispatch(
         activeChat({
-          status: "signle",
+          status: "single",
           id: item.senderid,
           name: item.sendername,
         })
       );
+      // localStorage.setItem("activeSingle", JSON.stringify(item));
     } else {
       dispatch(
         activeChat({
-          status: "signle",
+          status: "single",
           id: item.reciverid,
           name: item.recivername,
         })
