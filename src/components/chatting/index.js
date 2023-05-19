@@ -7,12 +7,19 @@ import { RxCross1 } from "react-icons/rx";
 import { TfiGallery } from "react-icons/tfi";
 import { MdKeyboardVoice } from "react-icons/md";
 import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
-import { getDatabase, ref, onValue, set, push } from "firebase/database";
 import "react-html5-camera-photo/build/css/index.css";
 import "./style.css";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
+import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import {
+  getStorage,
+  ref as sref,
+  uploadBytesResumable,
+  getDownloadURL,
+  uploadString,
+} from "firebase/storage";
 
 const Chatting = () => {
   const [open, setOpen] = useState(false);
@@ -20,17 +27,61 @@ const Chatting = () => {
   const [openGal, setOpenGal] = useState(false);
   const [msg, setMsg] = useState("");
   const [msglist, setMsglist] = useState([]);
+  const [captureImage, setCaptureImage] = useState("");
   const chooseFile = useRef(null);
   const db = getDatabase();
+  const storage = getStorage();
 
   const activeChatName = useSelector((active) => active.activeChat.active);
   const user = useSelector((users) => users.login.loggedIn);
   // camera capture function
   function handleTakePhoto(dataUri) {
-    // Do stuff with the photo...
-    console.log(dataUri);
+    setCaptureImage(dataUri);
+    const storageRef = sref(storage, "hola");
+    uploadString(storageRef, dataUri, "data_url").then((snapshot) => {
+      getDownloadURL(storageRef).then((downloadURL) => {
+        set(push(ref(db, "singlemsg")), {
+          whosendid: user.uid,
+          whosendname: user.displayName,
+          whoreciveid: activeChatName?.id,
+          whorecivename: activeChatName?.name,
+          img: downloadURL,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()} ${new Date().getHours()} : ${new Date().getMinutes()}`,
+        }).then(() => {
+          setOpenCam(false);
+        });
+      });
+    });
   }
 
+  // fileimageupload
+  let handleImageUpload = (e) => {
+    // console.log(e.target.files[0].name);
+    const storageRef = sref(storage, e.target.files[0].name);
+
+    const uploadTask = uploadBytesResumable(storageRef, e.target.files[0]);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+      },
+      (error) => {
+        console.log("errpr", error);
+      },
+      () => {
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log("File available at", downloadURL);
+        });
+      }
+    );
+  };
   // send Message
   const handleSendMsg = () => {
     if (activeChatName?.status == "single") {
@@ -98,7 +149,15 @@ const Chatting = () => {
                       </div>
                     </>
                   ) : (
-                    "img"
+                    <div className="right_msg">
+                      <div className="right_image">
+                        <ModalImage small={item.img} large={item.img} />
+                      </div>
+                      <span>
+                        {" "}
+                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                      </span>
+                    </div>
                   )
                 ) : item.msg ? (
                   <>
@@ -113,7 +172,15 @@ const Chatting = () => {
                     </div>
                   </>
                 ) : (
-                  "img"
+                  <div className="left_msg">
+                    <div className="left_image">
+                      <ModalImage small={item.img} large={item.img} />
+                    </div>
+                    <span>
+                      {" "}
+                      {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                    </span>
+                  </div>
                 )
               )
             : "grp msg"}
@@ -197,12 +264,21 @@ const Chatting = () => {
                       <CiCamera />
                     </div>
                   </div>
-                  <div className="gal">
+                  <label>
+                    <input hidden onChange={handleImageUpload} type="file" />
+                    <TfiGallery />
+                  </label>
+                  {/* <div className="gal">
                     <div onClick={() => chooseFile.current.click()}>
                       <TfiGallery />
                     </div>
-                    <input hidden type="file" ref={chooseFile} />
-                  </div>
+                    <input
+                      onClick={handleImageUpload}
+                      // hidden
+                      type="file"
+                      ref={chooseFile}
+                    />
+                  </div> */}
                   <div className="voiceRecorder">
                     <div>
                       <MdKeyboardVoice />
