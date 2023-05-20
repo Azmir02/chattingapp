@@ -13,12 +13,16 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
 import { getDatabase, ref, onValue, set, push } from "firebase/database";
+import { v4 as uuidv4 } from "uuid";
+import { AudioRecorder } from "react-audio-voice-recorder";
+
 import {
   getStorage,
   ref as sref,
   uploadBytesResumable,
   getDownloadURL,
   uploadString,
+  uploadBytes,
 } from "firebase/storage";
 
 const Chatting = () => {
@@ -27,6 +31,9 @@ const Chatting = () => {
   const [openGal, setOpenGal] = useState(false);
   const [msg, setMsg] = useState("");
   const [msglist, setMsglist] = useState([]);
+  const [audioURL, setAudioURL] = useState("");
+  const [blob, setBlob] = useState("");
+  const [showAudio, setShowAudio] = useState(false);
   const [captureImage, setCaptureImage] = useState("");
   const chooseFile = useRef(null);
   const db = getDatabase();
@@ -37,7 +44,7 @@ const Chatting = () => {
   // camera capture function
   function handleTakePhoto(dataUri) {
     setCaptureImage(dataUri);
-    const storageRef = sref(storage, "hola");
+    const storageRef = sref(storage, uuidv4());
     uploadString(storageRef, dataUri, "data_url").then((snapshot) => {
       getDownloadURL(storageRef).then((downloadURL) => {
         set(push(ref(db, "singlemsg")), {
@@ -77,7 +84,16 @@ const Chatting = () => {
         // Handle successful uploads on complete
         // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log("File available at", downloadURL);
+          set(push(ref(db, "singlemsg")), {
+            whosendid: user.uid,
+            whosendname: user.displayName,
+            whoreciveid: activeChatName?.id,
+            whorecivename: activeChatName?.name,
+            img: downloadURL,
+            date: `${new Date().getFullYear()} - ${
+              new Date().getMonth() + 1
+            } - ${new Date().getDate()} ${new Date().getHours()} : ${new Date().getMinutes()}`,
+          });
         });
       }
     );
@@ -118,6 +134,45 @@ const Chatting = () => {
     });
   }, [activeChatName?.id]);
 
+  const handleEnterPress = (e) => {
+    if (e.key == "Enter") {
+      handleSendMsg();
+    }
+  };
+
+  // for audio part
+  const addAudioElement = (blob) => {
+    const url = URL.createObjectURL(blob);
+    setAudioURL(url);
+    setBlob(blob);
+    // const audio = document.createElement("audio");
+    // audio.src = url;
+    // audio.controls = true;
+    // document.body.appendChild(audio);
+  };
+
+  const handleAudioUpload = () => {
+    const audiostorageRef = sref(storage, audioURL);
+
+    // 'file' comes from the Blob or File API
+    uploadBytes(audiostorageRef, blob).then((snapshot) => {
+      getDownloadURL(audiostorageRef).then((downloadURL) => {
+        set(push(ref(db, "singlemsg")), {
+          whosendid: user.uid,
+          whosendname: user.displayName,
+          whoreciveid: activeChatName?.id,
+          whorecivename: activeChatName?.name,
+          audio: downloadURL,
+          date: `${new Date().getFullYear()} - ${
+            new Date().getMonth() + 1
+          } - ${new Date().getDate()} ${new Date().getHours()} : ${new Date().getMinutes()}`,
+        }).then(() => {
+          setAudioURL("");
+        });
+      });
+    });
+  };
+
   return (
     <>
       <div className="chatting_box">
@@ -148,11 +203,19 @@ const Chatting = () => {
                         </span>
                       </div>
                     </>
-                  ) : (
+                  ) : item.img ? (
                     <div className="right_msg">
                       <div className="right_image">
                         <ModalImage small={item.img} large={item.img} />
                       </div>
+                      <span>
+                        {" "}
+                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="right_msg">
+                      <audio controls src={item.audio}></audio>
                       <span>
                         {" "}
                         {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
@@ -171,11 +234,19 @@ const Chatting = () => {
                       </span>
                     </div>
                   </>
-                ) : (
+                ) : item.img ? (
                   <div className="left_msg">
                     <div className="left_image">
                       <ModalImage small={item.img} large={item.img} />
                     </div>
+                    <span>
+                      {" "}
+                      {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="left_msg">
+                    <audio controls src={item.audio}></audio>
                     <span>
                       {" "}
                       {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
@@ -251,11 +322,17 @@ const Chatting = () => {
           {/* LEft Message End */}
         </div>
         <div className="message-inputs">
-          <div className="text_inputs">
-            <input type="text" onChange={(e) => setMsg(e.target.value)} />
-            <div className="options">
-              <div onClick={() => setOpen(!open)}>
-                <BsPlusLg />
+          {!showAudio && !audioURL && (
+            <div className="text_inputs">
+              <input
+                type="text"
+                onKeyUp={handleEnterPress}
+                onChange={(e) => setMsg(e.target.value)}
+              />
+              <div className="options">
+                <div onClick={() => setOpen(!open)}>
+                  <BsPlusLg />
+                </div>
               </div>
               {open && (
                 <div className="more">
@@ -287,10 +364,34 @@ const Chatting = () => {
                 </div>
               )}
             </div>
+          )}
+          <div
+            className="recorder-btn"
+            onClick={() => setShowAudio(!showAudio)}
+          >
+            <AudioRecorder
+              onRecordingComplete={(blob) => addAudioElement(blob)}
+            />
           </div>
-          <button type="button" onClick={handleSendMsg}>
-            <FaTelegramPlane />
-          </button>
+          {!showAudio && !audioURL && (
+            <button type="button" onClick={handleSendMsg}>
+              <FaTelegramPlane />
+            </button>
+          )}
+
+          {audioURL && (
+            <>
+              <div className="audio_wrapper">
+                <audio controls src={audioURL}></audio>
+                <div className="send_audio" onClick={handleAudioUpload}>
+                  <button>Send</button>
+                </div>
+                <div className="delete_audio" onClick={() => setAudioURL("")}>
+                  <button>Delete</button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
         {openCam && (
           <div className="capture_image">
