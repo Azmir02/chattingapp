@@ -4,11 +4,15 @@ import { FaTelegramPlane } from "react-icons/fa";
 import { CiCamera } from "react-icons/ci";
 import ModalImage from "react-modal-image";
 import { RxCross1 } from "react-icons/rx";
+import { BsEmojiSmile } from "react-icons/bs";
 import { TfiGallery } from "react-icons/tfi";
 import { MdKeyboardVoice } from "react-icons/md";
 import Camera, { FACING_MODES, IMAGE_TYPES } from "react-html5-camera-photo";
+import Lottie from "lottie-react";
 import "react-html5-camera-photo/build/css/index.css";
 import "./style.css";
+import EmojiPicker from "emoji-picker-react";
+import conversation from "../../svg/coversation.json";
 import { useRef } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
@@ -31,11 +35,14 @@ const Chatting = () => {
   const [openGal, setOpenGal] = useState(false);
   const [msg, setMsg] = useState("");
   const [msglist, setMsglist] = useState([]);
+  const [grpmsglist, setGrpmsgsglist] = useState([]);
+  const [grpmembers, setGrpmembers] = useState([]);
   const [audioURL, setAudioURL] = useState("");
   const [blob, setBlob] = useState("");
   const [showAudio, setShowAudio] = useState(false);
+  const [showEmoji, setShowEmoji] = useState(false);
   const [captureImage, setCaptureImage] = useState("");
-  const chooseFile = useRef(null);
+  const scrollMsg = useRef();
   const db = getDatabase();
   const storage = getStorage();
 
@@ -112,11 +119,21 @@ const Chatting = () => {
         } - ${new Date().getDate()} ${new Date().getHours()} : ${new Date().getMinutes()}`,
       });
     } else {
-      console.log("eita grp msg er jonno");
+      set(push(ref(db, "groupmsg")), {
+        whosendid: user.uid,
+        whosendname: user.displayName,
+        whoreciveid: activeChatName?.id,
+        whorecivename: activeChatName?.name,
+        adminid: activeChatName?.adminid,
+        msg: msg,
+        date: `${new Date().getFullYear()} - ${
+          new Date().getMonth() + 1
+        } - ${new Date().getDate()} ${new Date().getHours()} : ${new Date().getMinutes()}`,
+      });
     }
   };
 
-  // get all message
+  // get single message
   useEffect(() => {
     onValue(ref(db, "singlemsg"), (snapshot) => {
       let singlemsgArr = [];
@@ -131,6 +148,28 @@ const Chatting = () => {
         }
         setMsglist(singlemsgArr);
       });
+    });
+  }, [activeChatName?.id]);
+
+  // get groupmembers
+  useEffect(() => {
+    onValue(ref(db, "groupmembers"), (snapshot) => {
+      let membersArr = [];
+      snapshot.forEach((item) => {
+        membersArr.push(item.val().groupid + item.val().userid);
+      });
+      setGrpmembers(membersArr);
+    });
+  }, []);
+
+  // get group message
+  useEffect(() => {
+    onValue(ref(db, "groupmsg"), (snapshot) => {
+      let grpmsgArr = [];
+      snapshot.forEach((item) => {
+        grpmsgArr.push(item.val());
+      });
+      setGrpmsgsglist(grpmsgArr);
     });
   }, [activeChatName?.id]);
 
@@ -173,6 +212,17 @@ const Chatting = () => {
     });
   };
 
+  // Emoji select
+  const handleEmojiSelect = (emoji) => {
+    setMsg(msg + emoji.emoji);
+  };
+
+  // scrolmsg
+  useEffect(() => {
+    scrollMsg?.current?.scrollIntoView({ behavior: "smooth" });
+  }, [msglist]);
+
+  console.log(grpmembers);
   return (
     <>
       <div className="chatting_box">
@@ -190,22 +240,54 @@ const Chatting = () => {
         </div>
         <div className="message">
           {activeChatName?.status == "single"
-            ? msglist.map((item, i) =>
-                item.whosendid == user.uid ? (
-                  item.msg ? (
+            ? msglist.map((item, i) => (
+                <div ref={scrollMsg} key={i}>
+                  {item.whosendid == user.uid ? (
+                    item.msg ? (
+                      <>
+                        <div className="right_msg" key={i}>
+                          <div className="right_text">
+                            <p>{item.msg}</p>
+                          </div>
+                          <span>
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      </>
+                    ) : item.img ? (
+                      <div className="right_msg">
+                        <div className="right_image">
+                          <ModalImage small={item.img} large={item.img} />
+                        </div>
+                        <span>
+                          {" "}
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="right_msg">
+                        <audio controls src={item.audio}></audio>
+                        <span>
+                          {" "}
+                          {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                        </span>
+                      </div>
+                    )
+                  ) : item.msg ? (
                     <>
-                      <div className="right_msg" key={i}>
-                        <div className="right_text">
+                      <div className="left_msg" key={i}>
+                        <div className="left_text">
                           <p>{item.msg}</p>
                         </div>
                         <span>
+                          {" "}
                           {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                         </span>
                       </div>
                     </>
                   ) : item.img ? (
-                    <div className="right_msg">
-                      <div className="right_image">
+                    <div className="left_msg">
+                      <div className="left_image">
                         <ModalImage small={item.img} large={item.img} />
                       </div>
                       <span>
@@ -214,47 +296,53 @@ const Chatting = () => {
                       </span>
                     </div>
                   ) : (
-                    <div className="right_msg">
+                    <div className="left_msg">
                       <audio controls src={item.audio}></audio>
                       <span>
                         {" "}
                         {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
                       </span>
                     </div>
-                  )
-                ) : item.msg ? (
-                  <>
-                    <div className="left_msg" key={i}>
-                      <div className="left_text">
-                        <p>{item.msg}</p>
-                      </div>
-                      <span>
-                        {" "}
-                        {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                      </span>
-                    </div>
-                  </>
-                ) : item.img ? (
-                  <div className="left_msg">
-                    <div className="left_image">
-                      <ModalImage small={item.img} large={item.img} />
-                    </div>
-                    <span>
-                      {" "}
-                      {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="left_msg">
-                    <audio controls src={item.audio}></audio>
-                    <span>
-                      {" "}
-                      {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
-                    </span>
-                  </div>
-                )
-              )
-            : "grp msg"}
+                  )}
+                </div>
+              ))
+            : user?.uid == activeChatName?.adminid ||
+              grpmembers.includes(activeChatName?.id + user.uid)
+            ? grpmsglist.map((item, i) => (
+                <div key={i}>
+                  {item.whosendid == user.uid
+                    ? item.whoreciveid == activeChatName?.id && (
+                        <div className="right_msg" key={i}>
+                          <div className="right_text">
+                            <p>{item.msg}</p>
+                          </div>
+                          <span>
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      )
+                    : item.whoreciveid == activeChatName?.id && (
+                        <div className="left_msg" key={i}>
+                          <div className="left_text">
+                            <p>{item.msg}</p>
+                          </div>
+                          <span>
+                            {" "}
+                            {moment(item.date, "YYYYMMDD hh:mm").fromNow()}
+                          </span>
+                        </div>
+                      )}
+                </div>
+              ))
+            : "Not a Group Member"}
+          {/* 
+grpmsglist.map((item, i) => (
+                <div key={i}>
+                  {item.whosendid == activeChatName?.id
+                    ? "hello"
+                    : "vzQqi7ZQ4LaASCwVt7UVUDYm1Mu1"}
+                </div>
+              )) */}
           {/* LEft Message Start */}
           {/* <div className="left_msg">
             <div className="left_text">
@@ -328,7 +416,16 @@ const Chatting = () => {
                 type="text"
                 onKeyUp={handleEnterPress}
                 onChange={(e) => setMsg(e.target.value)}
+                value={msg}
               />
+              <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
+                <BsEmojiSmile />
+              </div>
+              {showEmoji && (
+                <div className="emoji-pickers">
+                  <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                </div>
+              )}
               <div className="options">
                 <div onClick={() => setOpen(!open)}>
                   <BsPlusLg />

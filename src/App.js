@@ -21,7 +21,7 @@ function App() {
       <Route>
         <Route element={<Loggedinuser />}>
           <Route element={<Rootlayout />}>
-            <Route path="/" element={<Home />}></Route>
+            <Route index path="/home" element={<Home />}></Route>
             <Route path="/message" element={<Message />}></Route>
           </Route>
         </Route>
