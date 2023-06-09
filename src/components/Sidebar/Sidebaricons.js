@@ -17,9 +17,9 @@ const Sidebaricons = () => {
       <div className="sidebar_icon">
         <IoMdNotifications />
       </div>
-      <div className="sidebar_icon">
+      <NavLink className="sidebar_icon" to="/accountinfo">
         <RxGear />
-      </div>
+      </NavLink>
     </div>
   );
 };

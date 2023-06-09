@@ -223,6 +223,8 @@ const Chatting = () => {
   }, [msglist]);
 
   console.log(grpmembers);
+  console.log(activeChatName?.id + user.uid);
+
   return (
     <>
       <div className="chatting_box">
@@ -409,40 +411,42 @@ grpmsglist.map((item, i) => (
           </div> */}
           {/* LEft Message End */}
         </div>
-        <div className="message-inputs">
-          {!showAudio && !audioURL && (
-            <div className="text_inputs">
-              <input
-                type="text"
-                onKeyUp={handleEnterPress}
-                onChange={(e) => setMsg(e.target.value)}
-                value={msg}
-              />
-              <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
-                <BsEmojiSmile />
-              </div>
-              {showEmoji && (
-                <div className="emoji-pickers">
-                  <EmojiPicker onEmojiClick={handleEmojiSelect} />
+
+        {activeChatName?.status == "single" ? (
+          <div className="message-inputs">
+            {!showAudio && !audioURL && (
+              <div className="text_inputs">
+                <input
+                  type="text"
+                  onKeyUp={handleEnterPress}
+                  onChange={(e) => setMsg(e.target.value)}
+                  value={msg}
+                />
+                <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
+                  <BsEmojiSmile />
                 </div>
-              )}
-              <div className="options">
-                <div onClick={() => setOpen(!open)}>
-                  <BsPlusLg />
-                </div>
-              </div>
-              {open && (
-                <div className="more">
-                  <div className="camera">
-                    <div onClick={() => setOpenCam(true)}>
-                      <CiCamera />
-                    </div>
+                {showEmoji && (
+                  <div className="emoji-pickers">
+                    <EmojiPicker onEmojiClick={handleEmojiSelect} />
                   </div>
-                  <label>
-                    <input hidden onChange={handleImageUpload} type="file" />
-                    <TfiGallery />
-                  </label>
-                  {/* <div className="gal">
+                )}
+                <div className="options">
+                  <div onClick={() => setOpen(!open)}>
+                    <BsPlusLg />
+                  </div>
+                </div>
+                {open && (
+                  <div className="more">
+                    <div className="camera">
+                      <div onClick={() => setOpenCam(true)}>
+                        <CiCamera />
+                      </div>
+                    </div>
+                    <label>
+                      <input hidden onChange={handleImageUpload} type="file" />
+                      <TfiGallery />
+                    </label>
+                    {/* <div className="gal">
                     <div onClick={() => chooseFile.current.click()}>
                       <TfiGallery />
                     </div>
@@ -453,43 +457,128 @@ grpmsglist.map((item, i) => (
                       ref={chooseFile}
                     />
                   </div> */}
-                  <div className="voiceRecorder">
-                    <div>
-                      <MdKeyboardVoice />
+                    <div className="voiceRecorder">
+                      <div>
+                        <MdKeyboardVoice />
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </div>
-          )}
-          <div
-            className="recorder-btn"
-            onClick={() => setShowAudio(!showAudio)}
-          >
-            <AudioRecorder
-              onRecordingComplete={(blob) => addAudioElement(blob)}
-            />
-          </div>
-          {!showAudio && !audioURL && (
-            <button type="button" onClick={handleSendMsg}>
-              <FaTelegramPlane />
-            </button>
-          )}
-
-          {audioURL && (
-            <>
-              <div className="audio_wrapper">
-                <audio controls src={audioURL}></audio>
-                <div className="send_audio" onClick={handleAudioUpload}>
-                  <button>Send</button>
-                </div>
-                <div className="delete_audio" onClick={() => setAudioURL("")}>
-                  <button>Delete</button>
-                </div>
+                )}
               </div>
-            </>
-          )}
-        </div>
+            )}
+            <div
+              className="recorder-btn"
+              onClick={() => setShowAudio(!showAudio)}
+            >
+              <AudioRecorder
+                onRecordingComplete={(blob) => addAudioElement(blob)}
+              />
+            </div>
+            {!showAudio && !audioURL && (
+              <button type="button" onClick={handleSendMsg}>
+                <FaTelegramPlane />
+              </button>
+            )}
+            {audioURL && (
+              <>
+                <div className="audio_wrapper">
+                  <audio controls src={audioURL}></audio>
+                  <div className="send_audio" onClick={handleAudioUpload}>
+                    <button>Send</button>
+                  </div>
+                  <div className="delete_audio" onClick={() => setAudioURL("")}>
+                    <button>Delete</button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : user?.uid == activeChatName?.adminid ||
+          grpmembers.includes(activeChatName?.id + user.uid) ? (
+          <div className="message-inputs">
+            {!showAudio && !audioURL && (
+              <div className="text_inputs">
+                <input
+                  type="text"
+                  onKeyUp={handleEnterPress}
+                  onChange={(e) => setMsg(e.target.value)}
+                  value={msg}
+                />
+                <div className="emoji" onClick={() => setShowEmoji(!showEmoji)}>
+                  <BsEmojiSmile />
+                </div>
+                {showEmoji && (
+                  <div className="emoji-pickers">
+                    <EmojiPicker onEmojiClick={handleEmojiSelect} />
+                  </div>
+                )}
+                <div className="options">
+                  <div onClick={() => setOpen(!open)}>
+                    <BsPlusLg />
+                  </div>
+                </div>
+                {open && (
+                  <div className="more">
+                    <div className="camera">
+                      <div onClick={() => setOpenCam(true)}>
+                        <CiCamera />
+                      </div>
+                    </div>
+                    <label>
+                      <input hidden onChange={handleImageUpload} type="file" />
+                      <TfiGallery />
+                    </label>
+                    {/* <div className="gal">
+                  <div onClick={() => chooseFile.current.click()}>
+                    <TfiGallery />
+                  </div>
+                  <input
+                    onClick={handleImageUpload}
+                    // hidden
+                    type="file"
+                    ref={chooseFile}
+                  />
+                </div> */}
+                    <div className="voiceRecorder">
+                      <div>
+                        <MdKeyboardVoice />
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            <div
+              className="recorder-btn"
+              onClick={() => setShowAudio(!showAudio)}
+            >
+              <AudioRecorder
+                onRecordingComplete={(blob) => addAudioElement(blob)}
+              />
+            </div>
+            {!showAudio && !audioURL && (
+              <button type="button" onClick={handleSendMsg}>
+                <FaTelegramPlane />
+              </button>
+            )}
+            {audioURL && (
+              <>
+                <div className="audio_wrapper">
+                  <audio controls src={audioURL}></audio>
+                  <div className="send_audio" onClick={handleAudioUpload}>
+                    <button>Send</button>
+                  </div>
+                  <div className="delete_audio" onClick={() => setAudioURL("")}>
+                    <button>Delete</button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        ) : (
+          "nai"
+        )}
+
         {openCam && (
           <div className="capture_image">
             <div className="close" onClick={() => setOpenCam(false)}>

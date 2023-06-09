@@ -14,6 +14,7 @@ import Loggedinuser from "./Privaterouter/Loggedin";
 import Forget from "./pages/Frogotpassword";
 import Rootlayout from "./Layout";
 import Message from "./pages/message";
+import Accountinfo from "./pages/Accountinfo";
 
 function App() {
   const router = createBrowserRouter(
@@ -23,6 +24,7 @@ function App() {
           <Route element={<Rootlayout />}>
             <Route index path="/home" element={<Home />}></Route>
             <Route path="/message" element={<Message />}></Route>
+            <Route path="/accountinfo" element={<Accountinfo />}></Route>
           </Route>
         </Route>
         <Route element={<Notloggedinuser />}>
