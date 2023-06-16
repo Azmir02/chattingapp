@@ -52,12 +52,12 @@ const Registration = () => {
         formik.values.password
       )
         .then(({ user }) => {
-          console.log(user);
           updateProfile(auth.currentUser, {
             displayName: formik.values.name,
           }).then(() => {
             setLoading(false);
             sendEmailVerification(auth.currentUser).then(() => {
+              console.log(auth.currentUser);
               set(ref(db, "users/" + user.uid), {
                 username: user.displayName,
                 email: user.email,
