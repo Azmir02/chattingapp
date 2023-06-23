@@ -171,11 +171,11 @@ const Login = () => {
                       sx={{
                         "& .MuiOutlinedInput-root.Mui-focused": {
                           "& > fieldset": {
-                            borderColor: "#11175d",
+                            borderColor: "var(--border-color)",
                           },
                         },
                         "& .MuiInputLabel-root.Mui-focused": {
-                          color: "#11175d",
+                          color: "var(--black)",
                         },
                       }}
                       value={formik.values.email}
@@ -196,11 +196,11 @@ const Login = () => {
                       sx={{
                         "& .MuiOutlinedInput-root.Mui-focused": {
                           "& > fieldset": {
-                            borderColor: "#11175d",
+                            borderColor: "var(--border-color)",
                           },
                         },
                         "& .MuiInputLabel-root.Mui-focused": {
-                          color: "#11175d",
+                          color: "var(--black)",
                         },
                       }}
                       value={formik.values.password}

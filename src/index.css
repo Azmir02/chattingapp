@@ -27,14 +27,34 @@ li {
   --error: #f55050;
   --green: #00FF75;
   --border-color: rgba(3, 1, 76, 0.2);
+  --body-color: #f9f9f9;
+  --left-msg: #F0F0FF;
+  --msg-color: #000;
+  --right-msg: #6363FC;
 }
+
+
+.dark{
+  --primary-color: #001C30;
+  --body-color:  #03001C;
+  --title-color: #fff;
+  --black: #ddd;
+  --border-color: #fff;
+  --white: #001C30;
+  --msg-left-color: #001C30;
+}
+
 body{
-  background-color: #f9f9f9;
+  background-color: var(--body-color);
+}
+
+body .dark{
+  background-color: var(--body-color);
 }
 
 /* Box Design */
 .box {
-  height: 100vh;
+  height: 102vh;
   align-items: center;
 }
 

@@ -1,0 +1,9 @@
+.themes-part{
+    width: 100%;
+    padding: 20px;
+    background-color: var(--white);
+    filter: drop-shadow(0px 24px 50px rgba(0, 0, 0, 0.1));
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+}

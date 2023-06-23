@@ -52,10 +52,6 @@ const Accountforms = () => {
     });
   };
 
-  //   update(ref(db, "users/" + users.uid), {
-  //     username: formik.values.name,
-  //   });
-
   return (
     <>
       <div>

@@ -50,12 +50,14 @@
     font-family: var(--primary-font);
     font-size: 20px;
     font-weight: 600;
+    color: var(--black);
 }
 
 .info span{
     font-family: var(--secondary-font);
     font-size: 16px;
     font-weight: 400;
+    color: var(--black);
 }
 
 .message{
@@ -69,7 +71,7 @@
 }
 
 .left_msg .left_text{
-    background-color: var(--secondary-white);
+    background-color: var(--left-msg);
     display: inline-block;
     padding: 14px 12px;
     max-width: 500px;
@@ -86,14 +88,14 @@
     height: 0;
     border-style: solid;
     border-width: 0 10px 20px 10px;
-    border-color: transparent transparent var(--secondary-white) transparent;
+    border-color: transparent transparent var(--left-msg) transparent;
 }
 
 .left_text p {
     font-family: var(--primary-font);
     font-size: 16px;
     font-weight: 400;
-    color: var(--black);
+    color: var(--msg-left-color);
 }
 
 .left_msg  span{
@@ -122,7 +124,7 @@
 }
 
 .right_msg .right_text{
-    background-color: var(--primary-color);
+    background-color: var(--right-msg);
     display: inline-block;
     text-align: start;
     padding: 14px 12px;
@@ -140,14 +142,14 @@
     height: 0;
     border-style: solid;
     border-width: 0 10px 20px 10px;
-    border-color: transparent transparent var(--primary-color) transparent;
+    border-color: transparent transparent var(--right-msg) transparent;
 }
 
 .right_text p {
     font-family: var(--primary-font);
     font-size: 16px;
     font-weight: 400;
-    color: var(--white);
+    color: var(--secondary-white);
 }
 
 .right_msg  span{

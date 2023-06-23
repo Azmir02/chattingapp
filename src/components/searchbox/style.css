@@ -17,6 +17,7 @@
 .search_icons svg{
     width: 20px;
     height: 20px;
+    fill: var(--black);
 }
 
 .search_fildes{
@@ -31,4 +32,6 @@
     font-family: var(--primary-font);
     font-size: 14px;
     font-weight: 400;
+    background-color: transparent;
+    color: var(--black);
 }

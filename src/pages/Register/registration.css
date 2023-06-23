@@ -1,6 +1,7 @@
 .reg-header {
   padding-bottom: 30px;
 }
+
 .reg-header h2 {
   font-family: var(--secondary-font);
   color: var(--title-color);
@@ -12,4 +13,16 @@
   font-family: var(--secondary-font);
   color: var(--black);
   font-size: 20px;
+}
+
+.inputs input {
+  border: 1px solid var(--border-color) !important;
+  color: var(--black) !important;
+}
+.input-box label {
+  color: var(--black) !important;
+}
+
+.si-link p{
+  color: var(--black) !important;
 }
