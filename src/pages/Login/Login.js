@@ -228,7 +228,7 @@ const Login = () => {
                       </Button>
                     ) : (
                       <Button type="submit" variant="contained">
-                        Sign Up
+                        Sign in
                       </Button>
                     )}
                   </Box>
