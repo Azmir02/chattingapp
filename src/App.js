@@ -15,14 +15,16 @@ import Forget from "./pages/Frogotpassword";
 import Rootlayout from "./Layout";
 import Message from "./pages/message";
 import Accountinfo from "./pages/Accountinfo";
+import { useSelector } from "react-redux";
 
 function App() {
+  const theme = useSelector((state) => state.themeChange.DarkMode);
   const router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
         <Route element={<Loggedinuser />}>
           <Route element={<Rootlayout />}>
-            <Route index path="/home" element={<Home />}></Route>
+            <Route index path="/" element={<Home />}></Route>
             <Route path="/message" element={<Message />}></Route>
             <Route path="/accountinfo" element={<Accountinfo />}></Route>
           </Route>
@@ -37,7 +39,7 @@ function App() {
   );
   return (
     <>
-      <div className="dark">
+      <div className={theme && "dark"}>
         <RouterProvider router={router}></RouterProvider>
       </div>
     </>

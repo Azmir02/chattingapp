@@ -184,7 +184,8 @@
 
 .text_inputs{
     padding: 15px 20px;
-    background-color: var(--secondary-white);
+    background-color: var(--body-color);
+    border: 1px solid var(--border-color);
     width: 80%;
     border-radius: 10px;
     display: flex;
@@ -193,9 +194,10 @@
 }
 .message-inputs input{
     width: 80%;
-    background-color: var(--secondary-white);
+    background-color: var(--body-color);
     border: none;
     outline: none;
+    color: var(--black);
 }
 
 .options{

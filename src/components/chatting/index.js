@@ -337,79 +337,6 @@ const Chatting = () => {
                 </div>
               ))
             : "Not a Group Member"}
-          {/* 
-grpmsglist.map((item, i) => (
-                <div key={i}>
-                  {item.whosendid == activeChatName?.id
-                    ? "hello"
-                    : "vzQqi7ZQ4LaASCwVt7UVUDYm1Mu1"}
-                </div>
-              )) */}
-          {/* LEft Message Start */}
-          {/* <div className="left_msg">
-            <div className="left_text">
-              <p>Hello Bro How Are You!</p>
-            </div>
-            <span>Today, 2:01pm</span>
-          </div> */}
-          {/* LEft Message End */}
-          {/* Right Message Start */}
-          {/* <div className="right_msg">
-            <div className="right_text">
-              <p>I'm Fine Thank you. What About You?</p>
-            </div>
-            <span>Today, 2:10pm</span>
-          </div>
-          <div className="right_msg">
-            <div className="right_text">
-              <p>
-                Hey Whats about your work progress. Can you please give me the
-                final update
-              </p>
-            </div>
-            <span>Today, 2:10pm</span>
-          </div> */}
-          {/* Right Message End */}
-          {/* LEft Message Start */}
-          {/* <div className="left_msg">
-            <div className="left_image">
-              <ModalImage
-                small={"/img/demochatimg.jpg"}
-                large={"/img/demochatimg.jpg"}
-              />
-            </div>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* LEft Message End */}
-          {/* Right Message Start */}
-          {/* <div className="right_msg">
-            <div className="right_image">
-              <ModalImage
-                small={"/img/demochatimg.jpg"}
-                large={"/img/demochatimg.jpg"}
-              />
-            </div>
-            <span>Today, 2:10pm</span>
-          </div> */}
-          {/* Right Message End */}
-          {/* Right Message Start */}
-          {/* <div className="right_msg">
-            <audio controls></audio>
-            <span>Today, 2:10pm</span>
-          </div> */}
-          {/* Right Message End */}
-          {/* LEft Message Start */}
-          {/* <div className="left_msg">
-            <audio controls></audio>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* LEft Message End */}
-          {/* LEft Message Start */}
-          {/* <div className="left_msg">
-            <video controls></video>
-            <span>Today, 3:01pm</span>
-          </div> */}
-          {/* LEft Message End */}
         </div>
 
         {activeChatName?.status == "single" ? (
@@ -446,17 +373,7 @@ grpmsglist.map((item, i) => (
                       <input hidden onChange={handleImageUpload} type="file" />
                       <TfiGallery />
                     </label>
-                    {/* <div className="gal">
-                    <div onClick={() => chooseFile.current.click()}>
-                      <TfiGallery />
-                    </div>
-                    <input
-                      onClick={handleImageUpload}
-                      // hidden
-                      type="file"
-                      ref={chooseFile}
-                    />
-                  </div> */}
+
                     <div className="voiceRecorder">
                       <div>
                         <MdKeyboardVoice />
@@ -528,17 +445,6 @@ grpmsglist.map((item, i) => (
                       <input hidden onChange={handleImageUpload} type="file" />
                       <TfiGallery />
                     </label>
-                    {/* <div className="gal">
-                  <div onClick={() => chooseFile.current.click()}>
-                    <TfiGallery />
-                  </div>
-                  <input
-                    onClick={handleImageUpload}
-                    // hidden
-                    type="file"
-                    ref={chooseFile}
-                  />
-                </div> */}
                     <div className="voiceRecorder">
                       <div>
                         <MdKeyboardVoice />

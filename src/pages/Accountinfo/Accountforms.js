@@ -65,6 +65,16 @@ const Accountforms = () => {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.name}
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+                  borderColor: "var(--border-color)",
+                },
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "var(--black)",
+              },
+            }}
           />
           <TextField
             type="email"
@@ -77,6 +87,16 @@ const Accountforms = () => {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.email}
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+                  borderColor: "var(--border-color)",
+                },
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "var(--black)",
+              },
+            }}
           />
           <TextField
             type="password"
@@ -88,6 +108,16 @@ const Accountforms = () => {
             onBlur={formik.handleBlur}
             onChange={formik.handleChange}
             value={formik.values.password}
+            sx={{
+              "& .MuiOutlinedInput-root.Mui-focused": {
+                "& > fieldset": {
+                  borderColor: "var(--border-color)",
+                },
+              },
+              "& .MuiInputLabel-root.Mui-focused": {
+                color: "var(--black)",
+              },
+            }}
           />
           <Button
             type="submit"

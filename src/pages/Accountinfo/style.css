@@ -7,7 +7,7 @@
 
 .account_info_box{
     width: 500px;
-    background-color: #fff;
+    background-color: var(--white);
     filter: drop-shadow(0px 24px 50px rgba(0, 0, 0, 0.1));
     padding: 40px;
     box-sizing: border-box;
@@ -35,4 +35,18 @@
 
 .update-btn{
     margin-top: 20px !important;
+}
+
+.account_info_box input {
+    border: 1px solid var(--border-color) !important;
+    color: var(--black) !important;
+}
+
+.account_info_box label {
+    color: var(--black) !important;
+}
+
+.css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+    opacity: 1;
+    -webkit-text-fill-color: var(--black) !important;
 }
